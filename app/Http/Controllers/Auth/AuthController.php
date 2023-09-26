@@ -11,6 +11,8 @@ use Hash;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
+use Illuminate\Support\Facades\DB;
+
 class AuthController extends Controller
 {
     /**
@@ -39,26 +41,37 @@ class AuthController extends Controller
      * @return response()
      */
     public function postLogin(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
 
-        $validUser = [
-            'email' => 'pepitoperez@gmail.com',
-            'password' => '123456'
-        ];
+    $credentials = $request->only('email', 'password');
+    /* $encodeado = base64_encode($credentials["password"]);
+    $decodeado = base64_decode($credentials["password"]); */
+
+
+    // Verifica las credenciales y el estado del usuario
+    $user = DB::table('usuarios_sistema')
+        ->where('usuariosistema_username', $credentials['email'])
+        ->where('usuariosistema_password', $credentials['password'])
+        ->where('usuariosistema_estado', 1)
+        ->first();
+
+
+    if ($user) {
+        // Autenticación exitosa
+        // print_r($user);
         
-        $credentials = $request->only('email', 'password');
-        /* if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')
-                        ->withSuccess('You have Successfully loggedin');
-        } */
-
-
-        return redirect("login")->withSuccess('Oppes! You have entered invalid credentials');
+        return redirect()->intended('dashboard')
+            ->withSuccess('You have Successfully logged in');
     }
+
+    return redirect("login")->withSuccess('Oppes! You have entered invalid credentials');
+}
+
+
 
     /**
      * Write code on Method
@@ -87,10 +100,13 @@ class AuthController extends Controller
     public function dashboard(): RedirectResponse
     {
         if (Auth::check()) {
-            return view('dashboard');
+            // Autenticación exitosa
+            print_r("Entró al dashboard");
+            /* return redirect()->intended('dashboard')
+                ->withSuccess('You have Successfully logged in'); */
         }
-
-        return redirect("login")->withSuccess('Opps! You do not have access');
+        print_r("No entró al dashboard");
+        /* return redirect("login")->withSuccess('Opps! You do not have access'); */
     }
 
     /**

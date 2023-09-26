@@ -48,15 +48,15 @@
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-1 mb-5">
         <div class="container">
             <a class="navbar-brand" href="{{ route('login') }}">Laravel</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto">
+    
+            <div class="collapse navbar-collapse show" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
                     @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
@@ -70,7 +70,6 @@
                     </li>
                     @endguest
                 </ul>
-                
             </div>
         </div>
     </nav>
